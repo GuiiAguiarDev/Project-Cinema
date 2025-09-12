@@ -140,13 +140,14 @@ public class CommandLineRunner implements org.springframework.boot.CommandLineRu
 		System.out.println("Salvo");
 
 		/*
-		 * Para ver os dados da lista, pois um filme pode esta em varias sessoes e uma
-		 * sess~çao tem varios tickets tbm
-		 */
-		
-		
-		
-	
+
+		/* Fim */
+
+		// Cadastrando o TICKET no Test
+
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
 
 		System.out.println("INFORMAÇÔES DO SISTEMA");
 		System.out.println("--------------------");
@@ -158,14 +159,11 @@ public class CommandLineRunner implements org.springframework.boot.CommandLineRu
 			System.out.println("Total Vendidos:" + session.GetTicketsSold());
 		}
 
-		
-		
 		Movie movie = new Movie();
-		
-		//Salvando na lista de sesssoes o filme
+
+		// Salvando na lista de sesssoes o filme
 		movie.addSession(session);
-		
-		
+
 		System.out.println(movie.getTotalSession());
 
 	}
