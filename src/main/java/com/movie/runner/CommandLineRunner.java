@@ -132,7 +132,7 @@ public class CommandLineRunner implements org.springframework.boot.CommandLineRu
 		session.addTicket(ticket3);
 		session.addTicket(ticket4);
 
-		// Salvabndo tickets no banco com tudo certo
+		// Salvando tickets no banco com tudo certo
 		ticketService.saveTicket(ticket);
 		ticketService.saveTicket(ticket2);
 		ticketService.saveTicket(ticket3);
@@ -140,10 +140,30 @@ public class CommandLineRunner implements org.springframework.boot.CommandLineRu
 		System.out.println("Salvo");
 
 		/*
+		 * 
+		 * /* Fim
+		 */
+
+		// Cadastrando o TICKET no Test
+
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
+
+		/* Inicio */
+
+		// Cadastrando o Movie no Test
+
+		Movie movie = new Movie();
+
+		// Salvando na lista de sesssoes o filme
+		movie.addSession(session);
+
+		System.out.println(movie.getTotalSession());
 
 		/* Fim */
 
-		// Cadastrando o TICKET no Test
+		// Cadastrando o Movie no Test
 
 		// --------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------
@@ -159,12 +179,11 @@ public class CommandLineRunner implements org.springframework.boot.CommandLineRu
 			System.out.println("Total Vendidos:" + session.GetTicketsSold());
 		}
 
-		Movie movie = new Movie();
-
-		// Salvando na lista de sesssoes o filme
-		movie.addSession(session);
-
-		System.out.println(movie.getTotalSession());
+		// OBSERVAÇÃOI PARA NAO ESQUECER, EU FALO ASSIM NA MINHA LISTA VOU TER
+		// EXEMPLO ESSA DO FILME EU FALO NA MINHA LISTA DE MOVIE VOU TER VARAS
+		// SESSESIONS
+		// PORQUE VOU TER UMA LISTA DE FILMES EXEMPLO BATMAN, SUPERMAN E PARA CADA FILME
+		// DESSE VOU TER SESSOES, FICA DICA
 
 	}
 }
