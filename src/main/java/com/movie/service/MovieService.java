@@ -87,9 +87,12 @@ public class MovieService {
 		// algum
 		// lugar que queremos, no caso quando eu for cadastrar a session, quero
 		// cadastrar
-		// o movie, associado, então pego o id do movie tipo o id 1 é batman
-		//então ele vai passar o 1 
-		Movie movie = movieRepository.findById(1L).orElseThrow(() -> new RuntimeException("Movie not Found!"));
+		// o movie, associado, então pego o id do movie tipo o id 1L é batman
+		// então ele vai passar o 1L, agr se eu quiser o filme de acordo com a sequencia
+		// certa, ou seja oq eu passar no mais e ele buscar
+		// eu passo o movieID em vez de 1L ou 2L ou 3L e etc, que ai vai ser de acordo
+		// como está no banco a informação que eu quero pelo mains
+		Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new RuntimeException("Movie not Found!"));
 
 		// Adicionando o filme X na sessão X, porque vamos supor eu tenho o filme batman
 		// ele pode esta na sessão 1 e 2 por exemplo então por isso a lista, um filme
@@ -100,7 +103,6 @@ public class MovieService {
 		// passo o size que é o int i=0, i++ e etc
 
 		movie.addSession(session);
-		
 
 		return movieRepository.save(movie);
 

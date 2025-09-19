@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.movie.repository.TicketRepository;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -87,13 +89,6 @@ public class Session {
 	public void addTicket(Ticket ticket) {
 		this.ticket.add(ticket);
 		ticket.setSession(this);
-	}
-
-	public int GetTicketsSold() {
-		// Pegando a quantidade de ingressos vendidos, porque é ingresso por sessão
-		// ou sej auma sessao pode ter varios ingressos ai pegamos aqui cada vez que ele
-		// adiciona um ingresso na lista, ou pegamos o total que foi adicionado mesmo.
-		return ticket.size();
 	}
 
 

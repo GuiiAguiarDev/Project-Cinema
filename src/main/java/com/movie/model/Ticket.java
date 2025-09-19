@@ -19,15 +19,20 @@ public class Ticket {
 	private Session session;
 	private double valor;
 
-	public Ticket() {
+	@ManyToOne
+	@JoinColumn(name = "compraId")
+	private Compra compra;
 
+	public Ticket() {
+		super();
 	}
 
-	public Ticket(Long id, Session session, double valor) {
+	public Ticket(Long id, Session session, double valor, Compra compra) {
 
 		this.id = id;
 		this.session = session;
 		this.valor = valor;
+		this.compra = compra;
 	}
 
 	public Long getId() {
@@ -53,7 +58,13 @@ public class Ticket {
 	public void setValor(double valor) {
 		this.valor = valor;
 	}
-	
-	
+
+	public Compra getCompra() {
+		return compra;
+	}
+
+	public void setCompra(Compra compra) {
+		this.compra = compra;
+	}
 
 }

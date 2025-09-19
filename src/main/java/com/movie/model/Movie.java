@@ -75,4 +75,8 @@ public class Movie {
 		return sessions.size();
 	}
 
+
+	
+	
+
 }
