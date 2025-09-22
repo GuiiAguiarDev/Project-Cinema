@@ -61,6 +61,11 @@ public class Movie {
 		return sessions;
 	}
 
+	@Override
+	public String toString() {
+		return ", name=" + name;
+	}
+
 	// Adicionar na lista de sessions
 	public void addSession(Session session) {
 		this.sessions.add(session);
@@ -74,9 +79,5 @@ public class Movie {
 	public int getTotalSession() {
 		return sessions.size();
 	}
-
-
-	
-	
 
 }

@@ -1,6 +1,7 @@
 package com.movie.service;
 
 import java.io.InputStream;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -106,6 +107,10 @@ public class MovieService {
 
 		return movieRepository.save(movie);
 
+	}
+
+	public List<Movie> findAll() {
+		return movieRepository.findAll();
 	}
 
 }

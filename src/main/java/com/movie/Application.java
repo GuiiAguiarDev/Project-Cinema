@@ -1,8 +1,11 @@
 package com.movie;
 
+import com.movie.model.Compra;
 import com.movie.model.Movie;
 import com.movie.model.Session;
 import com.movie.model.Ticket;
+import com.movie.repository.MovieRepository;
+import com.movie.service.CompraService;
 import com.movie.service.MovieService;
 import com.movie.service.SessionService;
 import com.movie.service.TicketService;
@@ -39,6 +42,7 @@ public class Application {
 		var movieService = context.getBean(MovieService.class);
 		var sessionService = context.getBean(SessionService.class);
 		var ticketService = context.getBean(TicketService.class);
+		var compraService = context.getBean(CompraService.class);
 
 		movieService.importMoviesFromJsonApi();
 
@@ -54,7 +58,7 @@ public class Application {
 		LocalDateTime dateTime = LocalDateTime.of(date, time);
 
 		session.setDateTime(dateTime);
-		session.setCapacidade(6);
+		session.setCapacidade(2);
 		movieService.addMovieToSession(1L, session);
 		sessionService.saveSession(session);
 		System.out.println("Sessão salva");
@@ -139,42 +143,117 @@ public class Application {
 		System.out.println("-----------------------------------");
 		System.out.println("-----------------------------------");
 
+		// ------------------------------------------------------------------------------------------
+
 		// Rodando sistema Methods
 
-		int resp = 0;
-		//Lista dos filmes para teste
-		List<Movie> listaMovies = new ArrayList<>();
-		while (resp != 2) {
-			System.out.println("Qual filme gostaria de assistir ?");
-			System.out.println(movie.getMovieId());
+		// Vamos lá para eu entender
+		// O que eu queria fazer e aprender
+		// Comprar um filme
 
-			int filmeEscolhido = sc.nextInt();
+		// Com o metodo FindAll eu vou buscar os filmes que cadastramos no sistema já
+		// Então ele vai pegar os filmes cadastrados e passar para a lista.
+		// Sempre quando a gente tiver algo cadastrado e quiser pegar todos esses dados
+		// e jogar
+		// para uma lista para depois acessar essas informações individualmente ou em um
+		// for vendo todos
+		// Fazer assim.
+		// Lembrando que esse metodo esta na minha service, só verificar lá a
+		// implementação dela
+		// é bem simples
+		List<Movie> filmesDisponiveis = movieService.findAll();
 
-			listaMovies.add(listaMovies.get(filmeEscolhido));
-			System.out.println("Deseja comprar mais um filme - 1-sim / 2-não");
-			resp = sc.nextInt();
+		System.out.println("Qual filme gostaria de assistir ?");
+		// Nos buscamos os filmes, como foi dito acima, passando eles para dentro da
+		// lista
+		// filmesDisponiveis, eles estão todos aqui, como quero mostrar eles todos de
+		// uma vez
+		// eu passo ele abaixo e coloco um size, que tem a função de pegar a quantidade
+		// total de filmes
+		// exemplo se tem rocky 1, rocky 2 e rocky 3 quer dizer que são um total de 3
+		// filmes
+		// ele pega o total em numero, então o codigo abaixo fala, enquanto o i for
+		// menor que a quantidade
+		// total de filmes, ele vai mostrar os dados, com isso, conseguimos mostrar
+		// todos os filmes
+		// que estão cadastrados
+		for (int i = 0; i < filmesDisponiveis.size(); i++) {
+			System.out
+					.println(filmesDisponiveis.get(i).getMovieId() + " Filme - " + filmesDisponiveis.get(i).getName());
 		}
+		// Aqui eu escolho o filme que quero ja que perguntei com systemout logo acima e
+		// depois mostrei as
+		// opcoes com for, colocamos o - 1 pq inicia no 0, mas mostramos apartir do 1,
+		// então arrumamos isso
+		int selectMovieIndex = sc.nextInt() - 1;
 
-		// Pegando o total de filmes que foram vendido, invocação do mal e superman
-		// invocação é codigo 1 e superman é 2
-		// toda vez que um filme é comprado ele adiciona o numero na lista
-		// eae minha lista fica assim 1, 2 , 1, 1 e etc ai quero pegar o numero dentro
-		// Esse metodo me mostra quantas vezes tal numero apareceu na lista, porem com o
-		// filter, ele pega exatamente oq queremos, nos passando, um por uma
-		// agr se quero de forma automatica, exemplo, compraram 10 filmes e ele ja vai
-		// percorrer
-		// esses 10 sem precisar eu ficar vendo um por um e sim ele fazer tudo pra mim
-		// só utilizar o collectors.groupingBy, então vou comentar o filter e deixar o
-		// groupingBy
+		// Aqui a gente cria uma variavel que vai receber o filme que vamos
+		// escolher/escolhemos
+		// Eu pego a lista que tem todos os filmes que puxamos pelo metodo que é o
+		// filmesDisponiveis, e passo a resposta da pergunta qual filme gostaria de
+		// assistir que é o
+		// selectMpvieIndex
+		// do filme que escolhemos, com isso vamos ter exatamente o filme certo dentro
+		// do filmeEscolhido
+		// Se foi rocky 1, rocky 2 ou rocky 3
+		Movie filmeEscolhido = filmesDisponiveis.get(selectMovieIndex);
 
-		Map<Object, Long> count = listaMovies.stream()
-				.collect(Collectors.groupingBy(f -> f, Collectors.counting()));
-		count.forEach((filmeId, qtd) -> System.out
-				.println("Filme do id " + filmeId + "foi comprado " + qtd));
+		// Sessao
+		// Aqui criamos uma lista para receber as sessoes ja cadastradas em nosso
+		// sistema relacionada a um filme que ja esta cadastrado tbm
+		// vamos buscar essas sessoes tambem pelo metodo com nome de findByIdSessions,
+		// que criamos
+		// na nossa classe com nome de SessionService, ir lá para ler e entender oq o
+		// metodo faz.
+		// Passamos o metodo aqui, e como vimos no SessionService no metodo
+		// findByIdSessions
+		// ele precisa de um parametro, que é o id do filme, então vamos passar aqui,
+		// a variavel filmeEscolhido que codamos acima, que ele tinha a função de pegar
+		// o
+		// filme que escolhemos, passando ele n o parametro, e a gente vai ter as
+		// sessoes
+		// disponiveis para esse filme, ou seja, se lá em cima, eu cadastrei a sessão 1
+		// e
+		// sessão 2
+		// para o filme do Rocky 2, vai me mostrar todas essas sessoes disponiveis po
+		// exemplo para o filme rocky 2 se eu selecionar ele fazendo ficar o numero do
+		// id dele na variavel filme escolhido
+		List<Session> sessions = sessionService.findByIdSessions(filmeEscolhido.getMovieId());
 
-		// long qtdCompraFilmes = IdDosFilmesComprados.stream().filter(n -> n ==
-		// 2).count();
-		//System.out.println("Quantidade de ingressos vendidos do filme " + qtdCompraFilmes);
+		// Aqui mostramos o resultado de todas as sessoes disponiveis para o filme que
+		// selecionamos e solicitamos que o cliente escolha o sessão que ele quer
+		System.out.println("Escolha sessao");
+		for (Session s : sessions) {
+			System.out.println(s.getId() + " " + s.getDateTime());
+		}
+		// Quando o cliente selecionar a sessão que ele quer, vai ir para dentro da
+		// variavel com nome de sessionID
+		Long sessionId = sc.nextLong();
+
+		// Esse metodo é para gente passar para a variavel a sessao que escolhemos, que
+		// vem do atributo acima com nome de sessionId
+		// da resposta, então eu vou ver lá as seguintes infortmações, sessão 1 rocky 2
+		// Sessão 2 rocky 2
+		// eu escolho qual eu quero, se escolho a 2, por exemplo, ela(numero 2) vai ir
+		// para a
+		// variavel com nome de sessaoEscolhida, tenho que passar no metodo com
+		// nome de
+		// findSessionById, ou seja lá nele, eu coloco a sessionId no parametro, nao
+		// posso passar sessionId
+		// direto, sem o metodo, porque a resposta que o
+		// sessionId recebe
+		// vem de uma lista, ent fica a dica tbm, sempre quando for assim temos que
+		// passar fazendo um metodo
+		// Esse metodo, está na classe SessionService tbm, para ver ele basta ir na
+		// classe SessionService
+		Session sessaoEscholhida = sessionService.findSessionById(sessionId);
+
+		System.out.println("Quantos ingressos deseja comprar");
+		int qtdTickets = sc.nextInt();
+
+		Compra comp1 = new Compra();
+		compraService.comprar(comp1, sessaoEscholhida, qtdTickets);
+
 	}
 
 }
