@@ -23,7 +23,7 @@ public class TicketService {
 		this.sessionRepository = sessionRepository;
 
 	}
-
+	//Salvar ticket
 	public void saveTicket(List<Ticket> tickets) {
 		// verifica a que session pertece o ticket para contar certo
 		Session session = tickets.get(0).getSession();
@@ -41,14 +41,15 @@ public class TicketService {
 		// então se no banco já tenho 3 ese cadasytrei mais 3 e a capacidade é 5, não
 		// vai salvar
 		// pois estorou, passou da capacidade permitida.
-		//lembrando que o size é para pegar o total
+		// lembrando que o size é para pegar o total
 		if (ticketsInDb + tickets.size() > session.getCapacidade()) {
 			System.out.println("Capacity exess");
 		} else {
 			ticketRepository.saveAll(tickets);
-			System.out.println("Tickets Registered!");
-		}
+			System.out.println("Tickts for movie " + session.getMovie().getName() + " - Session: " + session.getId()
+					+ ": " + " - " + "Registered");
 
+		}
 
 	}
 

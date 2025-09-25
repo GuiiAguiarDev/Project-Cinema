@@ -23,6 +23,7 @@ public class Movie {
 	private String name;
 
 	@OneToMany(mappedBy = "movie")
+
 	private List<Session> sessions = new ArrayList<>();
 
 	public Movie() {

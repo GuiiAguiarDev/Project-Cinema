@@ -13,14 +13,12 @@ import com.movie.service.TicketService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
+
 import java.util.Arrays;
-import java.util.Collections;
+
 import java.util.List;
-import java.util.Map;
+
 import java.util.Scanner;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,10 +26,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application {
 
+	private final MovieService movieService;
+
 	SessionService sessionService;
 
-	Application(SessionService sessionService) {
+	Application(SessionService sessionService, MovieService movieService) {
 		this.sessionService = sessionService;
+		this.movieService = movieService;
 	}
 
 	public static void main(String[] args) {
@@ -43,12 +44,17 @@ public class Application {
 		var sessionService = context.getBean(SessionService.class);
 		var ticketService = context.getBean(TicketService.class);
 		var compraService = context.getBean(CompraService.class);
-
+		var movieRepository = context.getBean(MovieRepository.class);
 		movieService.importMoviesFromJsonApi();
 
 		Movie movie = new Movie();
+
 		Session session = new Session();
 
+		// movie é so para chamar pois ela esta na classe movie
+		// mas na real eu estou adicionando session na minha lista de sessions
+		// addSesstion que significa a lista e o que esta em () é o que estou
+		// adicionando na lista
 		movie.addSession(session);
 		session.setMovie(movie);
 		System.out.println(movie.getTotalSession());
@@ -58,10 +64,24 @@ public class Application {
 		LocalDateTime dateTime = LocalDateTime.of(date, time);
 
 		session.setDateTime(dateTime);
-		session.setCapacidade(2);
+		session.setCapacidade(5);
 		movieService.addMovieToSession(1L, session);
 		sessionService.saveSession(session);
-		System.out.println("Sessão salva");
+		System.out.println("Session 1 - Registered");
+
+		// Salvando sessão Dois
+		Session session2 = new Session();
+		movie.addSession(session2);
+		session2.setMovie(movie);
+		LocalDate date2 = LocalDate.of(2025, 9, 25);
+		LocalTime time2 = LocalTime.of(22, 0);
+		LocalDateTime dateTime2 = LocalDateTime.of(date2, time2);
+
+		session2.setDateTime(dateTime2);
+		session2.setCapacidade(3);
+		movieService.addMovieToSession(1L, session2);
+		sessionService.saveSession(session2);
+		System.out.println("Session 2 - Registered");
 
 		Ticket ticket = new Ticket();
 		ticket.setValor(20);
@@ -90,15 +110,9 @@ public class Application {
 		session.addTicket(ticket5);
 
 		ticketService.saveTicket(Arrays.asList(ticket, ticket2, ticket3, ticket4, ticket5));
-		System.out.println("Salvo");
 
 		System.out.println("-----------------------------------");
 		System.out.println("-----------------------------------");
-		System.out.println("Informações do filme");
-		System.out.println("Número Sessão: " + session.getId());
-		System.out.println("Filme: " + session.getMovie().getName());
-		System.out.println("Horario do Filme: " + session.getDateTime());
-		System.out.println("Ingressos disponiveis " + session.getCapacidade());
 
 		System.out.println("-----------------------------------");
 		System.out.println("-----------------------------------");
@@ -124,21 +138,31 @@ public class Application {
 		ticket1.setValor(20);
 		ticket1.setSession(session1);
 
+		// Adicionanoum ticket na lista de tickets
 		session1.addTicket(ticket1);
-
+		//salvando o ticket, no exemplo abaico estamos salvando o ticket1
 		ticketService.saveTicket(Arrays.asList(ticket1));
-		System.out.println("Salvo");
 
-		System.out.println("-----------------------------------");
-		System.out.println("-----------------------------------");
-
-		for (Session s : movie1.getSessions()) {
+		// Mostrando o valor individual a partir do que eu passar, se vai ser o movie1
+		// m movie2, movie3 e etc
+		for (Session s : movie.getSessions()) {
 			System.out.println("Informações do filme");
 			System.out.println("Número Sessão: " + s.getId());
 			System.out.println("Filme: " + s.getMovie().getName());
 			System.out.println("Horario do Filme: " + s.getDateTime());
 			System.out.println("Ingressos disponiveis " + s.getCapacidade());
+			System.out.println("-----------------------------------");
+			System.out.println("-----------------------------------");
 		}
+
+		// Mostrando tudo que existe e não só um igual o código de cima, que mostra so
+		// um e oq eu
+		// quero manualmente
+		// Criei um metodo no MovieService e so chamei aqui, porque aqui nao se coloca
+		// if
+		// nem
+		// for, apenas chamamos no main, é o correto
+		movieService.listAllSessions();
 
 		System.out.println("-----------------------------------");
 		System.out.println("-----------------------------------");

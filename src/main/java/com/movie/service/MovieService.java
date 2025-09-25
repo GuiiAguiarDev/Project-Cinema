@@ -113,4 +113,23 @@ public class MovieService {
 		return movieRepository.findAll();
 	}
 
+	// no Application/Main nunca jamais devemos colocar lá if, for e etc, é apenas
+	// para inserir ifnormações e chamar metodos e etc
+	@Transactional
+	public void listAllSessions() {
+		List<Movie> allMovies = movieRepository.findAll();
+		for (Movie m : allMovies) {
+			for (Session s : m.getSessions()) {
+				System.out.println("Informações do filme");
+				System.out.println("Número Sessão: " + s.getId());
+				System.out.println("Filme: " + s.getMovie().getName());
+				System.out.println("Horario do Filme: " + s.getDateTime());
+				System.out.println("Ingressos disponiveis " + s.getCapacidade());
+				System.out.println("-----------------------------------");
+				System.out.println("-----------------------------------");
+			}
+
+		}
+	}
+
 }
