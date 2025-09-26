@@ -276,8 +276,19 @@ public class Application {
 		int qtdTickets = sc.nextInt();
 
 		Compra comp1 = new Compra();
+		Compra comp2 = new Compra();
+		Compra comp3 = new Compra();
 		compraService.comprar(comp1, sessaoEscholhida, qtdTickets);
+	
 
+		compraService.comprar(comp2, sessaoEscholhida, 3);
+
+		compraService.comprar(comp3, sessaoEscholhida, 1);
+		
+
+		
+
+		
 	}
 
 }

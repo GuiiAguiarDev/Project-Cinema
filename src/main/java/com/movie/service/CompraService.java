@@ -2,6 +2,7 @@ package com.movie.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,37 +37,58 @@ public class CompraService {
 		// na classe apllciation, é a parte que tem session.addTicket(ticket);
 		// session.addTicket(ticket2); então oq eu passar la estou falando que vou jogar
 		// para dentro dos ticketsDisponiveis
-		List<Ticket> ticketsDisponiveis = new ArrayList<>(session.getTicket());
+		List<Ticket> ticketsDisponiveis = session.getTicket().stream().filter(t -> t.getCompra() == null)
+				.collect(Collectors.toList());
+
+		if (qtdTickts > ticketsDisponiveis.size()) {
+			System.out.println("Não há sufiencies");
+			return;
+		}
+
 		// Aqui ja vai ser os que eu comprar um lista
 		List<Ticket> ticketsComprados = new ArrayList<>();
 
 		// Lógica
 		// esse qtdTickets é a quantidade de tickets que vou querer comprar
 		// quando chamar o metodo no Apllication eu vou passar ele, eae se o i for menor
-		// que ele (qtdTickts), ele simplesmente roda o metodo de novo
+		// que ele (qtdTickts), ele simplesmente roda o metodo de novo, assim
+		// consigo ter o controle, pois ele vai ficar rodando até chegar na qtd de
+		// tickets que quero comprar
+		// pois o remove(0) mesmo, ele sempre vai removendo a primeira linha da lista
+		// eae como
+		// quero remover
+		// conforme for comprando, o for vai fazendo isso pra mim, pq se falo que quero
+		// comprar 5
+		// ele vai ficar indo exemplo, i é < 5 sim, entao ele entra no for
+		// e remove, o i = 0 na primeira rodada
+		// depois o i agr vale 1 1 < 5 sim entao entra de novo e assim vai e vai
+		// removendo
+		// e adicionando na lista de comprados tbm oks, entendi
+		// então essa parte do for é apenas para remover e adicionar o fluxo
 
 		for (int i = 0; i < qtdTickts; i++) {
-			if (!ticketsDisponiveis.isEmpty()) {
-				// Estamos removendo o tickets da lista ticketsDisponiveis
-				// que contem os tickets relacionados a sessao, toda vez que passar aqui ele
-				// remove
-				// e joga para dentro do t, então um ticket removido dos disponiveis, significa
-				// um comprado
-				Ticket t = ticketsDisponiveis.remove(0);
-				// aqui eu pego o total dos que foram removidos e jogados para dentro e t e seto
-				// dentro do compra que passei como paramentro para chamar aqui
-				// e no caso eu tenho que chamar t e depois set.compra, porque o t vem do ticket
-				// e o ticket que tem relacionamento com compra então está tudo ligago
-				t.setCompra(comp);
-				// por fim a lista idependente que criamos aqui nos adicionados a ela o t, que
-				// no
-				// caso é os tickets removidos de ticketsDisponiveis que é os comprados tbm, vai
-				// justamente para a lista de comprados
-				ticketsComprados.add(t);
-			} else {
-				System.out.println("Não há disponiveis");
-			}
+
+			// Estamos removendo o tickets da lista ticketsDisponiveis
+			// que contem os tickets relacionados a sessao, toda vez que passar aqui ele
+			// remove
+			// e joga para dentro do t, então um ticket removido dos disponiveis, significa
+			// um comprado
+			Ticket t = ticketsDisponiveis.remove(0);
+			// aqui eu pego o total dos que foram removidos e jogados para dentro e t e seto
+			// dentro do compra que passei como paramentro para chamar aqui
+			// e no caso eu tenho que chamar t e depois set.compra, porque o t vem do ticket
+			// e o ticket que tem relacionamento com compra então está tudo ligago
+			t.setCompra(comp);
+			// por fim a lista idependente que criamos aqui nos adicionados a ela o t, que
+			// no
+			// caso é os tickets removidos de ticketsDisponiveis que é os comprados tbm, vai
+			// justamente para a lista de comprados
+			ticketsComprados.add(t);
+
 		}
+
+		// DEPOIS QUE ACABA O FLUXO ACIMA E NOS JÀ RESOLVEMOS A QUESTÂO DO FOR DE
+		// ADICIONAR E REMOVER
 		// comp é nossa compra, aqui eu passa a quantidade que foi comparada que vem da
 		// nossa list
 		// ticketcs comprados que fizemos asim
@@ -85,8 +107,10 @@ public class CompraService {
 		comp.addTickets(ticketsComprados);
 		// Aqui salvamos tudo
 		compraRepository.save(comp);
+
 		ticketRepository.saveAll(ticketsComprados);
 		sessionRepository.save(session);
+
 	}
 
 }
