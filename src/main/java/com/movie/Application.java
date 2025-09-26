@@ -20,6 +20,8 @@ import java.util.List;
 
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -44,7 +46,6 @@ public class Application {
 		var sessionService = context.getBean(SessionService.class);
 		var ticketService = context.getBean(TicketService.class);
 		var compraService = context.getBean(CompraService.class);
-		var movieRepository = context.getBean(MovieRepository.class);
 		movieService.importMoviesFromJsonApi();
 
 		Movie movie = new Movie();
@@ -140,7 +141,7 @@ public class Application {
 
 		// Adicionanoum ticket na lista de tickets
 		session1.addTicket(ticket1);
-		//salvando o ticket, no exemplo abaico estamos salvando o ticket1
+		// salvando o ticket, no exemplo abaico estamos salvando o ticket1
 		ticketService.saveTicket(Arrays.asList(ticket1));
 
 		// Mostrando o valor individual a partir do que eu passar, se vai ser o movie1
@@ -275,20 +276,19 @@ public class Application {
 		System.out.println("Quantos ingressos deseja comprar");
 		int qtdTickets = sc.nextInt();
 
+		// Fazendo várias compras a comp1, 2 e 3, comp1 passando no console e as demais
+		// direta aqui para testar, pois no console so da para passar uma se for sem for
 		Compra comp1 = new Compra();
 		Compra comp2 = new Compra();
 		Compra comp3 = new Compra();
 		compraService.comprar(comp1, sessaoEscholhida, qtdTickets);
-	
 
 		compraService.comprar(comp2, sessaoEscholhida, 3);
 
 		compraService.comprar(comp3, sessaoEscholhida, 1);
 		
+	
 
-		
-
-		
 	}
 
 }

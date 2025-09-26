@@ -32,16 +32,29 @@ public class CompraService {
 
 		// Na minha classe session, eu tenho uma lista e tickets, por isso eu chamo
 		// session primeiro, eae esses tickets eu estou cadastrando setando eles pelo
-		// meu Application, no main, a quantidade que eu passar lá eu estou falando
+		// meu Application, no main, a quantidade que eu passar lá salvar eu estou
+		// falando
 		// abaixo que vai ser jogadoo, para dentro da lista ticketsDisponiveis.
 		// na classe apllciation, é a parte que tem session.addTicket(ticket);
 		// session.addTicket(ticket2); então oq eu passar la estou falando que vou jogar
 		// para dentro dos ticketsDisponiveis
+		// eae uso stream para conseguir codar o filter ou map forEach e etc
+		// uso o filter para falar que se o ticket ainda nao foi comprado que no caso é
+		// null
+		// por isso == null, quer dizer que ele nao foi comprado ainda
+		// pq nao foi relacinado ou seja nao teve relacionamento tanto que se for no
+		// banco vai ta null por exemplo, então significa que nao foi comprado ainda
 		List<Ticket> ticketsDisponiveis = session.getTicket().stream().filter(t -> t.getCompra() == null)
 				.collect(Collectors.toList());
 
+		// Verificando se a quantidade que quero comprar nao é maior que a quantidade
+		// disponivel
+		// para venda, envolvendo qualquer tipo de venda ou seja se o joao comprou e o
+		// pedro
+		// e a julia vai comprar vai interferir ou seja tem 10 ingressos joao comprou 5
+		// e pedro 5 a juliana nao vai conseguir, uma interfere na outra
 		if (qtdTickts > ticketsDisponiveis.size()) {
-			System.out.println("Não há sufiencies");
+			System.out.println("Não há Tickets suficientes para compra");
 			return;
 		}
 
